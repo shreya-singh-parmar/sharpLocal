@@ -7,6 +7,7 @@ const userlist = document.querySelector('#users');
  
 myForm.addEventListener('submit',onSubmit);
 userlist.addEventListener('click', onRemove);
+userlist.addEventListener('click', onedit);
   function onSubmit(e) {
     e.preventDefault();
    if(nameInput.value === '' || emailInput.value === '' || numbInput===''){
@@ -25,6 +26,13 @@ userlist.addEventListener('click', onRemove);
     dlt.className= 'dlt';
      dlt.appendChild(document.createTextNode('delete'));
      li.append(dlt);
+
+     var edit = document.createElement('button');
+    edit.className= 'edt';
+     edit.appendChild(document.createTextNode('edit'));
+     li.append(edit);
+
+
      userlist.append(li);
           let myObj ={
       name : nameInput.value,
@@ -36,7 +44,7 @@ userlist.addEventListener('click', onRemove);
     localStorage.setItem(itemId.toString(), myObj_ser);
     nameInput.value='';
     emailInput.value='';
-    
+    numbInput.value='';
 
    }
   }
@@ -47,10 +55,25 @@ userlist.addEventListener('click', onRemove);
         var li = e.target.parentElement;
         userlist.removeChild(li);
         const itemId = li.getAttribute('data-myObj_ser-id');
-
-        // Remove the item from localStorage using the correct key
         localStorage.removeItem(itemId); 
         
       }
     }
   }
+
+  function onedit(e) {
+    if (e.target.classList.contains('edt')) {
+       var li = e.target.parentElement;
+       let editobjkey = li.getAttribute('data-myObj_ser-id'); 
+       let obj = JSON.parse(localStorage.getItem(editobjkey)); 
+       document.getElementById('name').value = obj.name;
+       document.getElementById('email').value = obj.email;
+       document.getElementById('num').value = obj.number;
+       var li = e.target.parentElement;
+        userlist.removeChild(li);
+
+        localStorage.removeItem(editobjkey); 
+        console.log(obj);
+    }
+ }
+ 
